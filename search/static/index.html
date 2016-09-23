@@ -1,0 +1,156 @@
+<!doctype html>
+<html data-ng-app="searchApp" data-ng-controller="searchCtrl as ctrl">
+<head>
+	<title>Search</title>
+	<link rel="stylesheet" href="static/style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script	src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
+	<script src="https://www.google.com/jsapi"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-route.js"></script>
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.3.js"></script>
+	<script src="static/search/search.module.js"></script>
+	<script src="static/search/search.ctrl.js"></script>
+	<script src="static/typeahead/typeahead.module.js"></script>
+	<script src="static/typeahead/typeahead.ctrl.js"></script>
+	<script src="static/bio-pv.min.js"></script>
+	<link rel="shortcut icon" href="static/favicon.ico">
+</head>
+<body>
+<!-- Navigation bar -->
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="http://www.synbiochem.co.uk">
+				<span><img alt="SYNBIOCHEM" src="static/favicon.ico"></span>
+				Search
+			</a>
+		</div>
+	</div>
+</nav>
+	
+<div class="container">
+	<form class="form-horizontal" role="form">
+		<div class="form-group">
+			<label class="control-label col-sm-2">Organism:</label>
+			<div class="col-sm-10">
+				<div data-ng-controller="typeaheadCtrl as typeahead_ctrl">
+					<input type="text" class="form-control"
+						data-ng-init="typeahead_ctrl.url='/organisms/'"
+						data-ng-model="ctrl.organism"
+						placeholder="Organism"
+						required
+						autocomplete="off"
+						uib-typeahead="organism as organism.name for organism in typeahead_ctrl.getItem($viewValue)"
+						typeahead-min-length="5"
+						typeahead-editable="false">  
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2">Organism id:</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control"
+				data-ng-model="ctrl.organism.id"
+				readonly></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2">Chemical:</label>
+			<div class="col-sm-10">
+				<div data-ng-controller="typeaheadCtrl as typeahead_ctrl">
+					<input type="text" class="form-control"
+						data-ng-init="typeahead_ctrl.url='/chemicals/'"
+						data-ng-model="ctrl.chemical"
+						placeholder="Chemical"
+						required
+						autocomplete="off"
+						uib-typeahead="chemical as chemical.name for chemical in typeahead_ctrl.getItem($viewValue)"
+						typeahead-min-length="3"
+						typeahead-editable="false">  
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2">Chemical id:</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control"
+				data-ng-model="ctrl.chemical.id"
+				readonly></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2">Enzyme:</label>
+			<div class="col-sm-10">
+				<div data-ng-controller="typeaheadCtrl as typeahead_ctrl">
+					<input type="text" class="form-control"
+						data-ng-init="typeahead_ctrl.url='/enzymes/'"
+						data-ng-model="ctrl.enzyme"
+						placeholder="Enzyme"
+						required
+						autocomplete="off"
+						uib-typeahead="enzyme as enzyme['Protein names'][0] for enzyme in typeahead_ctrl.getItem($viewValue)"
+						typeahead-min-length="5"
+						typeahead-editable="false">  
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2">Enzyme id:</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control"
+				data-ng-model="ctrl.enzyme.id"
+				readonly></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2">Enzyme entry:</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control"
+				data-ng-model="ctrl.enzyme['Entry name']"
+				readonly></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2">Enzyme organism:</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control"
+				data-ng-model="ctrl.enzyme['Organism']"
+				readonly></input>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="col-md-6">
+	<div id="sequence-panel" class="panel panel-default">
+  		<div class="panel-heading">Sequences</div>
+  		<div id="sequence-viewer" class="result-panel panel-body">
+  			<div data-ng-repeat="i in ctrl.range(0, ctrl.enzyme.Sequence.length)" class="residue {{ctrl.secondaryStructure[i]}}" data-ng-mouseleave="ctrl.residue=null" data-ng-mouseover="ctrl.residue=i">{{ctrl.enzyme.Sequence[i]}}</div>
+  		</div>
+	</div>
+</div>
+
+<div class="col-md-6">
+	<div id="structure-panel" class="panel panel-default">
+		<div class="panel-heading">Structure</div>
+		<div id="structure-manager" class="result-panel panel-body">
+			<div id="structure-viewer"></div>
+			<div id="structure-text">{{ctrl.structureText}}</div>
+			<div id="structure-controller">
+				<button id="previous" type="button" class="btn btn-default btn-sm" data-ng-disabled="ctrl.enzyme || ctrl.pdbIndex == 0">
+ 					<span class="glyphicon glyphicon-menu-left" aria-hidden="true" data-ng-click="ctrl.updateStructure(-1)"></span>
+				</button>
+				<button id="next" type="button" class="btn btn-default btn-sm" data-ng-disabled="ctrl.enzyme || ctrl.pdbIndex >= ctrl.enzyme['Cross-reference (PDB)'].length - 1">
+ 					<span class="glyphicon glyphicon-menu-right" aria-hidden="true" data-ng-click="ctrl.updateStructure(1)"></span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
