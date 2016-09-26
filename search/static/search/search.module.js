@@ -1,1 +1,1 @@
-var searchApp = angular.module("searchApp", ["typeaheadApp"]);
+var searchApp = angular.module("searchApp", ["sequenceApp", "typeaheadApp"]);

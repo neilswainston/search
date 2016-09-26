@@ -17,40 +17,6 @@ searchApp.controller("searchCtrl", function($scope) {
 	};
 	
 	
-	/* SEQUENCE */
-	self.secondaryStructure = [];
-	
-	$scope.$watch(angular.bind(this, function() {
-		return self.enzyme;
-	}), function(newVal) {
-		updateSecondaryStructure();
-	});
-	
-	updateSecondaryStructure = function() {
-		self.secondaryStructure = [];
-
-		if(self.enzyme) {
-			for(var i=0; i < self.enzyme.Sequence.length; i++) {
-				self.secondaryStructure.push("");
-			}
-
-			setSecondaryStructure(self.enzyme["Beta strand"], "beta-strand");
-			setSecondaryStructure(self.enzyme["Helix"], "helix");
-			setSecondaryStructure(self.enzyme["Turn"], "turn");
-		}
-	};
-
-	setSecondaryStructure = function(secStruct, className) {
-		for(var i = 0; i < secStruct.length; i++) {
-			obj = secStruct[i];
-
-			for(var j = obj["start"] - 1; j < obj["end"]; j++) {
-				self.secondaryStructure[j] = className;
-			}
-		}
-	};
-	
-	
 	/* STRUCTURE */
 	
 	var mol = null;

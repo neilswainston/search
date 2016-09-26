@@ -1,0 +1,1 @@
+var sequenceApp = angular.module("sequenceApp", []);
