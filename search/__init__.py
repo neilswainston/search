@@ -20,9 +20,9 @@ import uuid
 from Bio import SeqIO
 from Bio.PDB.Entity import Entity
 from flask import Flask, jsonify, request, Response
-import libchebipy
 
 from synbiochem.utils import sequence_utils, taxonomy_utils
+import libchebipy
 
 
 # Configuration:
